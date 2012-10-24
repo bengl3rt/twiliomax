@@ -1,0 +1,269 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22CF11AE0EE9A8840054F513 /* twilio.c in Sources */ = {isa = PBXBuildFile; fileRef = 22CF11AD0EE9A8840054F513 /* twilio.c */; };
+		2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54266BCE05E6E9780000000C /* MaxAPI.framework */; };
+		B5645922163775B600DA695D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5645921163775B600DA695D /* libxml2.dylib */; };
+		B57DA5CF1610D81D00673C0F /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = B57DA5CD1610D81D00673C0F /* mongoose.c */; };
+		B57DA5D01610D81D00673C0F /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = B57DA5CE1610D81D00673C0F /* mongoose.h */; };
+		B5AEBDD8162E6E0E001E951A /* clocaltunnel.h in Headers */ = {isa = PBXBuildFile; fileRef = B5AEBDD7162E6E0E001E951A /* clocaltunnel.h */; };
+		B5AEBDDB162E6E1D001E951A /* libclocaltunnel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDA162E6E1D001E951A /* libclocaltunnel.a */; };
+		B5AEBDDD162E7759001E951A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDC162E7759001E951A /* libz.dylib */; };
+		B5AEBDDF162E7761001E951A /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDE162E7761001E951A /* libcrypto.dylib */; };
+		B5D4118A1607F26000F8003E /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5D411891607F26000F8003E /* libcurl.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
+		22CF11AD0EE9A8840054F513 /* twilio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = twilio.c; sourceTree = "<group>"; };
+		2FBBEAE508F335360078DB84 /* twiliomax.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = twiliomax.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
+		54266BCE05E6E9780000000C /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
+		B5645921163775B600DA695D /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		B57DA5CD1610D81D00673C0F /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
+		B57DA5CE1610D81D00673C0F /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mongoose.h; sourceTree = "<group>"; };
+		B5AEBDD7162E6E0E001E951A /* clocaltunnel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clocaltunnel.h; sourceTree = "<group>"; };
+		B5AEBDDA162E6E1D001E951A /* libclocaltunnel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libclocaltunnel.a; sourceTree = "<group>"; };
+		B5AEBDDC162E7759001E951A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		B5AEBDDE162E7761001E951A /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		B5D411891607F26000F8003E /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2FBBEADC08F335360078DB84 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5645922163775B600DA695D /* libxml2.dylib in Frameworks */,
+				B5AEBDDF162E7761001E951A /* libcrypto.dylib in Frameworks */,
+				B5AEBDDD162E7759001E951A /* libz.dylib in Frameworks */,
+				B5D4118A1607F26000F8003E /* libcurl.dylib in Frameworks */,
+				2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */,
+				B5AEBDDB162E6E1D001E951A /* libclocaltunnel.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* iterator */ = {
+			isa = PBXGroup;
+			children = (
+				B5645921163775B600DA695D /* libxml2.dylib */,
+				B5AEBDDE162E7761001E951A /* libcrypto.dylib */,
+				B5AEBDDC162E7759001E951A /* libz.dylib */,
+				B5AEBDDA162E6E1D001E951A /* libclocaltunnel.a */,
+				B5D411891607F26000F8003E /* libcurl.dylib */,
+				22CF10220EE984600054F513 /* maxmspsdk.xcconfig */,
+				08FB77ADFE841716C02AAC07 /* Source */,
+				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				19C28FB4FE9D528D11CA2CBB /* Products */,
+			);
+			name = iterator;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				54266BCE05E6E9780000000C /* MaxAPI.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ADFE841716C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				B5AEBDD7162E6E0E001E951A /* clocaltunnel.h */,
+				B57DA5CB1610D81500673C0F /* mongoose */,
+				22CF11AD0EE9A8840054F513 /* twilio.c */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB4FE9D528D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2FBBEAE508F335360078DB84 /* twiliomax.mxo */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B57DA5CB1610D81500673C0F /* mongoose */ = {
+			isa = PBXGroup;
+			children = (
+				B57DA5CD1610D81D00673C0F /* mongoose.c */,
+				B57DA5CE1610D81D00673C0F /* mongoose.h */,
+			);
+			name = mongoose;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2FBBEAD708F335360078DB84 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B57DA5D01610D81D00673C0F /* mongoose.h in Headers */,
+				B5AEBDD8162E6E0E001E951A /* clocaltunnel.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2FBBEAD608F335360078DB84 /* max-external */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FBBEAE008F335360078DB84 /* Build configuration list for PBXNativeTarget "max-external" */;
+			buildPhases = (
+				2FBBEAD708F335360078DB84 /* Headers */,
+				2FBBEAD808F335360078DB84 /* Resources */,
+				2FBBEADA08F335360078DB84 /* Sources */,
+				2FBBEADC08F335360078DB84 /* Frameworks */,
+				2FBBEADF08F335360078DB84 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "max-external";
+			productName = iterator;
+			productReference = 2FBBEAE508F335360078DB84 /* twiliomax.mxo */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "twiliomax" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* iterator */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2FBBEAD608F335360078DB84 /* max-external */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2FBBEAD808F335360078DB84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		2FBBEADF08F335360078DB84 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2FBBEADA08F335360078DB84 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22CF11AE0EE9A8840054F513 /* twilio.c in Sources */,
+				B57DA5CF1610D81D00673C0F /* mongoose.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2FBBEAD008F335010078DB84 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				SDKROOT = macosx10.7;
+			};
+			name = Development;
+		};
+		2FBBEAD108F335010078DB84 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				SDKROOT = macosx10.7;
+			};
+			name = Deployment;
+		};
+		2FBBEAE108F335360078DB84 /* Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22CF10220EE984600054F513 /* maxmspsdk.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+					"\"$(SRCROOT)\"",
+				);
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Development;
+		};
+		2FBBEAE208F335360078DB84 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22CF10220EE984600054F513 /* maxmspsdk.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+					"\"$(SRCROOT)\"",
+				);
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Deployment;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "twiliomax" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FBBEAD008F335010078DB84 /* Development */,
+				2FBBEAD108F335010078DB84 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		2FBBEAE008F335360078DB84 /* Build configuration list for PBXNativeTarget "max-external" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FBBEAE108F335360078DB84 /* Development */,
+				2FBBEAE208F335360078DB84 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}
