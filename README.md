@@ -19,11 +19,11 @@ The object takes two arguments for initialization, your Twilio Account SID and a
 
 * receivesms - This one doesn't take any arguments, but does a lot of stuff. 
 
-	1. Starts a local web server 
+1. Starts a local web server 
 
-	2. Sets up a tunnel to that server using [localtunnel][lt-website] 
+2. Sets up a tunnel to that server using [localtunnel][lt-website] 
 
-	3. Sets the SMS URL of the incoming number in your twilio account to the external URL of the localtunnel
+3. Sets the SMS URL of the incoming number in your twilio account to the external URL of the localtunnel
 
 
 **The object currently only sends one message out of its only outlet:**
