@@ -15,6 +15,8 @@
 
 #include "clocaltunnel.h"
 
+#include "twilioapi.h"
+
 ////////////////////////// object struct
 typedef struct _twiliomax 
 {
@@ -25,7 +27,7 @@ typedef struct _twiliomax
     CURL *curl;
     
     char *twilio_account_sid;
-    char *twilio_phone_number;
+    struct incoming_phone_number *twilio_phone_number;
     
     struct mg_context *mongoose;
     struct clocaltunnel_client *clocaltunnel;
@@ -87,6 +89,10 @@ void twiliomax_free(t_twiliomax *x)
         
         clocaltunnel_global_cleanup();
     }
+    
+    if (x->twilio_phone_number) {
+        free(x->twilio_phone_number);
+    }
 }
 
 
@@ -95,9 +101,9 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
 	t_twiliomax *x = NULL;
 
 	if ((x = (t_twiliomax *)object_alloc(twiliomax_class))) {
-        if (argc != 3) {
-            object_error((t_object *)x, "Please provide a twilio account SID, auth token, and outgoing phone number");
-        } else if (argv[0].a_type != A_SYM || argv[1].a_type != A_SYM || argv[2].a_type != A_SYM) {
+        if (argc != 2) {
+            object_error((t_object *)x, "Please provide a twilio account SID and auth token");
+        } else if (argv[0].a_type != A_SYM || argv[1].a_type != A_SYM) {
             object_error((t_object *)x, "All arguments should be strings");
         } else {
             x->m_outlet1 = outlet_new((t_object *)x, NULL);
@@ -106,7 +112,6 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             object_post((t_object *)x, "libcurl initialized at %p", x->curl);
             
             x->twilio_account_sid = atom_getsym(&argv[0])->s_name;
-            x->twilio_phone_number = atom_getsym(&argv[2])->s_name;
             
             char *twilio_account_auth_token = atom_getsym(&argv[1])->s_name;
             
@@ -115,6 +120,14 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             sprintf(userpass, "%s:%s", x->twilio_account_sid, twilio_account_auth_token);
             
             curl_easy_setopt(x->curl, CURLOPT_USERPWD, userpass);
+            
+            x->twilio_phone_number = malloc(sizeof(struct incoming_phone_number));
+            
+            /*if (get_incoming_phone_number(x->twilio_account_sid, x->curl, x->twilio_phone_number) < 0) {
+                
+            }*/
+            
+            memcpy(x->twilio_phone_number->phone_number, "+16173000575", 13);
             
             x->mongoose = NULL;
             x->clocaltunnel = NULL;
@@ -143,21 +156,23 @@ static void *twiliomax_mongoose_callback(enum mg_event event,
         mg_get_var(post_data, post_data_len, "From", sms_from, sizeof(sms_from));
         mg_get_var(post_data, post_data_len, "Body", sms_body, sizeof(sms_body));
         
-        object_post((t_object *)x, "Got sms From: %s Body: %s", sms_from, sms_body);
-        
-        t_atom sms_atoms[2];
-        
-        atom_setsym(&sms_atoms[0], gensym(sms_from));
-        atom_setsym(&sms_atoms[1], gensym(sms_body));
-        
-        outlet_anything(x->m_outlet1, gensym("sms"), 2, sms_atoms);
+        if (strlen(sms_body) > 0 && strlen(sms_from) > 0) {
+            object_post((t_object *)x, "Got sms From: %s Body: %s", sms_from, sms_body);
+            
+            t_atom sms_atoms[2];
+            
+            atom_setsym(&sms_atoms[0], gensym(sms_from));
+            atom_setsym(&sms_atoms[1], gensym(sms_body));
+            
+            outlet_anything(x->m_outlet1, gensym("sms"), 2, sms_atoms);
+        }
         
         mg_printf(conn,
                   "HTTP/1.0 200 OK\r\n"
                   "Content-Type: application/xml\r\n\r\n"
                   "%s",
                   twilio_response);
-        
+
         return "";
     } else {
         return NULL;
@@ -214,46 +229,5 @@ void twiliomax_sendsms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
     char *destination_number = atom_getsym(&argv[0])->s_name;
     char *message = atom_getsym(&argv[1])->s_name;
     
-    object_post((t_object *)x, "Sending SMS to: %s Contents: %s", destination_number, message);
-    
-    struct curl_httppost *formpost=NULL;
-    struct curl_httppost *lastptr=NULL;
-    
-    curl_formadd(&formpost,
-                 &lastptr,
-                 CURLFORM_COPYNAME, "From",
-                 CURLFORM_COPYCONTENTS, x->twilio_phone_number,
-                 CURLFORM_END);
- 
-    curl_formadd(&formpost,
-                 &lastptr,
-                 CURLFORM_COPYNAME, "To",
-                 CURLFORM_COPYCONTENTS, destination_number,
-                 CURLFORM_END);
- 
-    curl_formadd(&formpost,
-                 &lastptr,
-                 CURLFORM_COPYNAME, "Body",
-                 CURLFORM_COPYCONTENTS, message,
-                 CURLFORM_END);
-    
-    char *url_prefix = "https://api.twilio.com/2010-04-01/Accounts/";
-    char *url_suffix = "/SMS/Messages.xml";
-    
-    char url[strlen(url_prefix)+strlen(x->twilio_account_sid)+strlen(url_suffix)+1];
-    
-    sprintf(url, "%s%s%s", url_prefix, x->twilio_account_sid, url_suffix);
-    
-    curl_easy_setopt(x->curl, CURLOPT_URL, url);
-    curl_easy_setopt(x->curl, CURLOPT_HTTPPOST, formpost);
-    
-    CURLcode res = curl_easy_perform(x->curl);
-
-    if(res == CURLE_OK) {
-        object_post((t_object *)x, "CURL OK");
-    } else {
-        object_post((t_object *)x, "CURL FAILED");
-    }
-    
-    curl_formfree(formpost);
+    send_outgoing_sms(x->twilio_account_sid, x->curl, x->twilio_phone_number, destination_number, message);
 }

@@ -20,6 +20,7 @@
 		B5EAF44216377F7200E2FD0B /* jsmn.c in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF43F16377F7200E2FD0B /* jsmn.c */; };
 		B5EAF44316377F7200E2FD0B /* jsmn.h in Headers */ = {isa = PBXBuildFile; fileRef = B5EAF44016377F7200E2FD0B /* jsmn.h */; };
 		B5EAF44416377F7200E2FD0B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B5EAF44116377F7200E2FD0B /* LICENSE */; };
+		B5EAF4471637914D00E2FD0B /* twilioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF4461637914D00E2FD0B /* twilioapi.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,8 @@
 		B5EAF43F16377F7200E2FD0B /* jsmn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsmn.c; sourceTree = "<group>"; };
 		B5EAF44016377F7200E2FD0B /* jsmn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsmn.h; sourceTree = "<group>"; };
 		B5EAF44116377F7200E2FD0B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B5EAF4461637914D00E2FD0B /* twilioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = twilioapi.c; sourceTree = "<group>"; };
+		B5EAF4481637915A00E2FD0B /* twilioapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = twilioapi.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				B5EAF43E16377F7200E2FD0B /* jsmn */,
+				B5EAF4461637914D00E2FD0B /* twilioapi.c */,
+				B5EAF4481637915A00E2FD0B /* twilioapi.h */,
 			);
 			path = twilioapi;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 				22CF11AE0EE9A8840054F513 /* twilio.c in Sources */,
 				B57DA5CF1610D81D00673C0F /* mongoose.c in Sources */,
 				B5EAF44216377F7200E2FD0B /* jsmn.c in Sources */,
+				B5EAF4471637914D00E2FD0B /* twilioapi.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
