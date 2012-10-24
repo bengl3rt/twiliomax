@@ -17,6 +17,9 @@
 		B5AEBDDD162E7759001E951A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDC162E7759001E951A /* libz.dylib */; };
 		B5AEBDDF162E7761001E951A /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDE162E7761001E951A /* libcrypto.dylib */; };
 		B5D4118A1607F26000F8003E /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5D411891607F26000F8003E /* libcurl.dylib */; };
+		B5EAF44216377F7200E2FD0B /* jsmn.c in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF43F16377F7200E2FD0B /* jsmn.c */; };
+		B5EAF44316377F7200E2FD0B /* jsmn.h in Headers */ = {isa = PBXBuildFile; fileRef = B5EAF44016377F7200E2FD0B /* jsmn.h */; };
+		B5EAF44416377F7200E2FD0B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B5EAF44116377F7200E2FD0B /* LICENSE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		B5AEBDDC162E7759001E951A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B5AEBDDE162E7761001E951A /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		B5D411891607F26000F8003E /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
+		B5EAF43F16377F7200E2FD0B /* jsmn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsmn.c; sourceTree = "<group>"; };
+		B5EAF44016377F7200E2FD0B /* jsmn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsmn.h; sourceTree = "<group>"; };
+		B5EAF44116377F7200E2FD0B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,7 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				B5EAF43D16377F7200E2FD0B /* twilioapi */,
 				B5AEBDD7162E6E0E001E951A /* clocaltunnel.h */,
 				B57DA5CB1610D81500673C0F /* mongoose */,
 				22CF11AD0EE9A8840054F513 /* twilio.c */,
@@ -102,6 +109,24 @@
 			name = mongoose;
 			sourceTree = "<group>";
 		};
+		B5EAF43D16377F7200E2FD0B /* twilioapi */ = {
+			isa = PBXGroup;
+			children = (
+				B5EAF43E16377F7200E2FD0B /* jsmn */,
+			);
+			path = twilioapi;
+			sourceTree = "<group>";
+		};
+		B5EAF43E16377F7200E2FD0B /* jsmn */ = {
+			isa = PBXGroup;
+			children = (
+				B5EAF43F16377F7200E2FD0B /* jsmn.c */,
+				B5EAF44016377F7200E2FD0B /* jsmn.h */,
+				B5EAF44116377F7200E2FD0B /* LICENSE */,
+			);
+			path = jsmn;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -111,6 +136,7 @@
 			files = (
 				B57DA5D01610D81D00673C0F /* mongoose.h in Headers */,
 				B5AEBDD8162E6E0E001E951A /* clocaltunnel.h in Headers */,
+				B5EAF44316377F7200E2FD0B /* jsmn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +191,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5EAF44416377F7200E2FD0B /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +214,7 @@
 			files = (
 				22CF11AE0EE9A8840054F513 /* twilio.c in Sources */,
 				B57DA5CF1610D81D00673C0F /* mongoose.c in Sources */,
+				B5EAF44216377F7200E2FD0B /* jsmn.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
