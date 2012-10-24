@@ -75,8 +75,6 @@ int get_incoming_phone_number(char *account_sid, CURL *the_curl, struct incoming
         return -1;
     }
     
-    post("%s\n", chunk.memory);
-    
     jsmn_parser p;
 	jsmntok_t tok[100];
 	
@@ -174,7 +172,6 @@ int send_outgoing_sms(char *account_sid, CURL *the_curl, struct incoming_phone_n
                  CURLFORM_COPYCONTENTS, message,
                  CURLFORM_END);
     
-    char *url_prefix = "https://api.twilio.com/2010-04-01/Accounts/";
     char *url_suffix = "/SMS/Messages.xml";
     
     char url[strlen(url_prefix)+strlen(account_sid)+strlen(url_suffix)+1];
@@ -186,9 +183,49 @@ int send_outgoing_sms(char *account_sid, CURL *the_curl, struct incoming_phone_n
     
     CURLcode res = curl_easy_perform(the_curl);
     
-    if(res == CURLE_OK) {
-        post("CURL OK");
-    } else {
+    if(res != CURLE_OK) {
+        post("CURL FAILED");
+        return -1;
+    }
+    
+    curl_formfree(formpost);
+    
+    return 0;
+}
+
+
+int set_sms_url(char *account_sid, CURL *the_curl, struct incoming_phone_number *phone_number, char *sms_url) {
+    struct MemoryStruct chunk;
+    chunk.memory = NULL;
+    
+    curl_easy_setopt(the_curl, CURLOPT_WRITEFUNCTION, twilioWriteMemoryCallback);
+	curl_easy_setopt(the_curl, CURLOPT_WRITEDATA, (void *)&chunk);
+    
+    char fqdn[50];
+    sprintf(fqdn, "http://%s", sms_url);
+    
+    struct curl_httppost *formpost=NULL;
+    struct curl_httppost *lastptr=NULL;
+    
+    curl_formadd(&formpost,
+                 &lastptr,
+                 CURLFORM_COPYNAME, "SmsUrl",
+                 CURLFORM_COPYCONTENTS, fqdn,
+                 CURLFORM_END);
+    
+    char url_suffix[100];
+    sprintf(url_suffix, "/IncomingPhoneNumbers/%s.json", phone_number->sid);
+    
+    char url[strlen(url_prefix)+strlen(account_sid)+strlen(url_suffix)+1];
+    
+    sprintf(url, "%s%s%s", url_prefix, account_sid, url_suffix);
+    
+    curl_easy_setopt(the_curl, CURLOPT_URL, url);
+    curl_easy_setopt(the_curl, CURLOPT_HTTPPOST, formpost);
+    
+    CURLcode res = curl_easy_perform(the_curl);
+    
+    if(res != CURLE_OK) {
         post("CURL FAILED");
         return -1;
     }

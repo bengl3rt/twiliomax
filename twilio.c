@@ -123,11 +123,9 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             
             x->twilio_phone_number = malloc(sizeof(struct incoming_phone_number));
             
-            /*if (get_incoming_phone_number(x->twilio_account_sid, x->curl, x->twilio_phone_number) < 0) {
+            if (get_incoming_phone_number(x->twilio_account_sid, x->curl, x->twilio_phone_number) < 0) {
                 
-            }*/
-            
-            memcpy(x->twilio_phone_number->phone_number, "+16173000575", 13);
+            }
             
             x->mongoose = NULL;
             x->clocaltunnel = NULL;
@@ -157,8 +155,6 @@ static void *twiliomax_mongoose_callback(enum mg_event event,
         mg_get_var(post_data, post_data_len, "Body", sms_body, sizeof(sms_body));
         
         if (strlen(sms_body) > 0 && strlen(sms_from) > 0) {
-            object_post((t_object *)x, "Got sms From: %s Body: %s", sms_from, sms_body);
-            
             t_atom sms_atoms[2];
             
             atom_setsym(&sms_atoms[0], gensym(sms_from));
@@ -205,9 +201,9 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
         
         strcpy(external_url, clocaltunnel_client_get_external_url(x->clocaltunnel));
         
-        object_post((t_object *)x, "%s\n", external_url);
-        
         //Update twilio configuration with new SMS url
+        
+        set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url);
         
     }
 }

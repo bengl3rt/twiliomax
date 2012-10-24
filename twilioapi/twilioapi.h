@@ -18,4 +18,6 @@ int get_incoming_phone_number(char *account_sid, CURL *the_curl, struct incoming
 
 int send_outgoing_sms(char *account_sid, CURL *the_curl, struct incoming_phone_number *phone_number, char *destination_number, char *message);
 
+int set_sms_url(char *account_sid, CURL *the_curl, struct incoming_phone_number *phone_number, char *sms_url);
+
 #endif
