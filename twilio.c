@@ -1,11 +1,3 @@
-/**
-	@file
-	twiliomax - a max object shell
-	jeremy bernstein - jeremy@bootsquad.com	
-
-	@ingroup	examples	
-*/
-
 #include "ext.h"							// standard Max include, always required
 #include "ext_obex.h"						// required for new style Max object
 
@@ -109,7 +101,6 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             x->m_outlet1 = outlet_new((t_object *)x, NULL);
             
             x->curl = curl_easy_init();
-            object_post((t_object *)x, "libcurl initialized at %p", x->curl);
             
             x->twilio_account_sid = atom_getsym(&argv[0])->s_name;
             
@@ -121,10 +112,33 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             
             curl_easy_setopt(x->curl, CURLOPT_USERPWD, userpass);
             
-            x->twilio_phone_number = malloc(sizeof(struct incoming_phone_number));
+            x->twilio_phone_number = calloc(1, sizeof(struct incoming_phone_number));
             
-            if (get_incoming_phone_number(x->twilio_account_sid, x->curl, x->twilio_phone_number) < 0) {
+            int get_number_status = get_incoming_phone_number(x->twilio_account_sid, x->curl, x->twilio_phone_number);
+
+            if (get_number_status < 0) {
+                switch (get_number_status) {
+                    case -1:
+                    {   
+                        object_error((t_object *)x, "Unable to communicate with twilio to retrieve inbound phone numbers.");
+                        object_error((t_object *)x, "Check your internet connection and your twilio credentials and try again");
+                        break;
+                    }
+                    case -2:
+                    {
+                        object_error((t_object *)x, "The JSON response from twilio did not contain any incoming phone numbers");
+                        object_error((t_object *)x, "Make sure your twilio account has at least one paid, active phone number");
+                        break;
+                    }
+                    default:
+                        break;
+                }
                 
+            }
+            
+            if (!x->twilio_phone_number->phone_number || !x->twilio_phone_number->sid) {
+                object_error((t_object *)x, "The JSON response from twilio did not contain any incoming phone numbers");
+                object_error((t_object *)x, "Make sure your twilio account has at least one paid, active phone number");
             }
             
             x->mongoose = NULL;
@@ -168,7 +182,7 @@ static void *twiliomax_mongoose_callback(enum mg_event event,
                   "Content-Type: application/xml\r\n\r\n"
                   "%s",
                   twilio_response);
-
+        
         return "";
     } else {
         return NULL;
@@ -190,11 +204,55 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
         
         clocaltunnel_client_init(x->clocaltunnel, 8080);
         
-        clocaltunnel_client_start(x->clocaltunnel, &err);
+        clocaltunnel_client_start(x->clocaltunnel);
         
         while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
             //TODO wait on a semaphore with a timeout? give a callback? TBD
             usleep(50);
+        }
+        
+        while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
+            if (clocaltunnel_client_get_state(x->clocaltunnel) == CLOCALTUNNEL_CLIENT_ERROR)  {
+                clocaltunnel_error err = clocaltunnel_client_get_last_error(x->clocaltunnel);
+                
+                switch (err) {
+                    case CLOCALTUNNEL_ERROR_MALLOC:
+                    {
+                        object_error((t_object *)x, "twiliomax: Unable to allocate memory for localtunnel client");
+                        break;
+                    }
+                    case CLOCALTUNNEL_ERROR_MISC:
+                    {
+                        object_error((t_object *)x, "twiliomax: Misc error in localtunnel client");
+                        break;
+                    }
+                        
+                    case CLOCALTUNNEL_ERROR_PTHREAD:
+                    {
+                        object_error((t_object *)x, "twiliomax: Error starting receive thread in localtunnel client");
+                        break;
+                    }
+                    case CLOCALTUNNEL_ERROR_CURL:
+                    {
+                        object_error((t_object *)x, "twiliomax: Error communicating with localtunnel web service");
+                        break;
+                    }
+                    case CLOCALTUNNEL_ERROR_SOCKET:
+                    {
+                        object_error((t_object *)x, "twiliomax: Unable to open a socket to localtunnel server");
+                        break;
+                    }
+                    case CLOCALTUNNEL_ERROR_SSH:
+                    {
+                        object_error((t_object *)x, "twiliomax: Error establishing SSH communication with localtunnel server");
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return;
+            }
+            usleep(500);
         }
         
         char external_url[50];
@@ -202,15 +260,17 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
         strcpy(external_url, clocaltunnel_client_get_external_url(x->clocaltunnel));
         
         //Update twilio configuration with new SMS url
+        object_post((t_object *)x, external_url);
         
-        set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url);
-        
+        if (set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url) < 0) {
+            object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
+        }
     }
 }
 
 
 void twiliomax_sendsms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
-
+    
     
     if (argc != 2) {
         object_error((t_object *)x, "sendsms: Exactly two arguments required");
@@ -225,5 +285,7 @@ void twiliomax_sendsms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
     char *destination_number = atom_getsym(&argv[0])->s_name;
     char *message = atom_getsym(&argv[1])->s_name;
     
-    send_outgoing_sms(x->twilio_account_sid, x->curl, x->twilio_phone_number, destination_number, message);
+    if (send_outgoing_sms(x->twilio_account_sid, x->curl, x->twilio_phone_number, destination_number, message) < 0) {
+        object_error((t_object *)x, "Unable to communicate with Twilio to send outgoing SMS");
+    }
 }
