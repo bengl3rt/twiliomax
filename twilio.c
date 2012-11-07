@@ -73,6 +73,8 @@ void twiliomax_free(t_twiliomax *x)
     
     if (x->mongoose) {
         mg_stop(x->mongoose);
+        
+        x->mongoose = NULL;
     }
     
     if (x->clocaltunnel) {
@@ -80,6 +82,8 @@ void twiliomax_free(t_twiliomax *x)
         clocaltunnel_client_free(x->clocaltunnel);
         
         clocaltunnel_global_cleanup();
+        
+        x->clocaltunnel = NULL;
     }
     
     if (x->twilio_phone_number) {
@@ -207,48 +211,52 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
         clocaltunnel_client_start(x->clocaltunnel);
         
         while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
-            //TODO wait on a semaphore with a timeout? give a callback? TBD
-            usleep(50);
-        }
-        
-        while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
             if (clocaltunnel_client_get_state(x->clocaltunnel) == CLOCALTUNNEL_CLIENT_ERROR)  {
                 clocaltunnel_error err = clocaltunnel_client_get_last_error(x->clocaltunnel);
-                
+
                 switch (err) {
                     case CLOCALTUNNEL_ERROR_MALLOC:
                     {
-                        object_error((t_object *)x, "twiliomax: Unable to allocate memory for localtunnel client");
+                        object_error((t_object *)x, "Unable to allocate memory for localtunnel client");
                         break;
                     }
                     case CLOCALTUNNEL_ERROR_MISC:
                     {
-                        object_error((t_object *)x, "twiliomax: Misc error in localtunnel client");
+                        object_error((t_object *)x, "Misc error in localtunnel client");
                         break;
                     }
                         
                     case CLOCALTUNNEL_ERROR_PTHREAD:
                     {
-                        object_error((t_object *)x, "twiliomax: Error starting receive thread in localtunnel client");
+                        object_error((t_object *)x, "Error starting receive thread in localtunnel client");
                         break;
                     }
                     case CLOCALTUNNEL_ERROR_CURL:
                     {
-                        object_error((t_object *)x, "twiliomax: Error communicating with localtunnel web service");
+                        object_error((t_object *)x, "Error communicating with localtunnel web service");
                         break;
                     }
                     case CLOCALTUNNEL_ERROR_SOCKET:
                     {
-                        object_error((t_object *)x, "twiliomax: Unable to open a socket to localtunnel server");
+                        object_error((t_object *)x, "Unable to open a socket to localtunnel server");
                         break;
                     }
                     case CLOCALTUNNEL_ERROR_SSH:
                     {
-                        object_error((t_object *)x, "twiliomax: Error establishing SSH communication with localtunnel server");
+                        object_error((t_object *)x, "Error establishing SSH communication with localtunnel server");
+                        break;
+                    }
+                    case CLOCALTUNNEL_ERROR_SSH_AGENT:
+                    {
+                        object_error((t_object *)x, "SSH agent could not authenticate. Try adding a key using ssh-add\n");
                         break;
                     }
                     default:
+                    {
+                        object_error((t_object *)x, "Unknown clocaltunnel error");
                         break;
+                    }
+                        
                 }
                 return;
             }
