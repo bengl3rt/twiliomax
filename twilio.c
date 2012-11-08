@@ -202,12 +202,16 @@ static void *twiliomax_mongoose_callback(enum mg_event event,
 }
 
 void twiliomax_receivesms_qtask(t_twiliomax *x) {
+    
+    critical_enter(0);
     if (!x->mongoose) {
         const char *options[] = {"listening_ports", "8080", NULL};
         
         x->mongoose = mg_start(&twiliomax_mongoose_callback, x, options);
     }
+    critical_exit(0);
     
+    critical_enter(0);
     if (!x->clocaltunnel) {
         clocaltunnel_error err;
         
@@ -216,68 +220,70 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
         clocaltunnel_client_init(x->clocaltunnel, 8080);
         
         clocaltunnel_client_start(x->clocaltunnel);
-        
-        while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
-            if (clocaltunnel_client_get_state(x->clocaltunnel) == CLOCALTUNNEL_CLIENT_ERROR)  {
-                clocaltunnel_error err = clocaltunnel_client_get_last_error(x->clocaltunnel);
-                
-                switch (err) {
-                    case CLOCALTUNNEL_ERROR_MALLOC:
-                    {
-                        object_error((t_object *)x, "Unable to allocate memory for localtunnel client");
-                        break;
-                    }
-                    case CLOCALTUNNEL_ERROR_MISC:
-                    {
-                        object_error((t_object *)x, "Misc error in localtunnel client");
-                        break;
-                    }
-                        
-                    case CLOCALTUNNEL_ERROR_PTHREAD:
-                    {
-                        object_error((t_object *)x, "Error starting receive thread in localtunnel client");
-                        break;
-                    }
-                    case CLOCALTUNNEL_ERROR_CURL:
-                    {
-                        object_error((t_object *)x, "Error communicating with localtunnel web service");
-                        break;
-                    }
-                    case CLOCALTUNNEL_ERROR_SOCKET:
-                    {
-                        object_error((t_object *)x, "Unable to open a socket to localtunnel server");
-                        break;
-                    }
-                    case CLOCALTUNNEL_ERROR_SSH:
-                    {
-                        object_error((t_object *)x, "Error establishing SSH communication with localtunnel server");
-                        break;
-                    }
-                    case CLOCALTUNNEL_ERROR_SSH_AGENT:
-                    {
-                        object_error((t_object *)x, "SSH agent could not authenticate. Try adding a key using ssh-add\n");
-                        break;
-                    }
-                    default:
-                    {
-                        object_error((t_object *)x, "Unknown clocaltunnel error");
-                        break;
-                    }
-                        
+    }
+    
+    while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
+        if (clocaltunnel_client_get_state(x->clocaltunnel) == CLOCALTUNNEL_CLIENT_ERROR)  {
+            clocaltunnel_error err = clocaltunnel_client_get_last_error(x->clocaltunnel);
+            
+            switch (err) {
+                case CLOCALTUNNEL_ERROR_MALLOC:
+                {
+                    object_error((t_object *)x, "Unable to allocate memory for localtunnel client");
+                    break;
                 }
-                return;
+                case CLOCALTUNNEL_ERROR_MISC:
+                {
+                    object_error((t_object *)x, "Misc error in localtunnel client");
+                    break;
+                }
+                    
+                case CLOCALTUNNEL_ERROR_PTHREAD:
+                {
+                    object_error((t_object *)x, "Error starting receive thread in localtunnel client");
+                    break;
+                }
+                case CLOCALTUNNEL_ERROR_CURL:
+                {
+                    object_error((t_object *)x, "Error communicating with localtunnel web service");
+                    break;
+                }
+                case CLOCALTUNNEL_ERROR_SOCKET:
+                {
+                    object_error((t_object *)x, "Unable to open a socket to localtunnel server");
+                    break;
+                }
+                case CLOCALTUNNEL_ERROR_SSH:
+                {
+                    object_error((t_object *)x, "Error establishing SSH communication with localtunnel server");
+                    break;
+                }
+                case CLOCALTUNNEL_ERROR_SSH_AGENT:
+                {
+                    object_error((t_object *)x, "SSH agent could not authenticate. Try adding a key using ssh-add\n");
+                    break;
+                }
+                default:
+                {
+                    object_error((t_object *)x, "Unknown clocaltunnel error");
+                    break;
+                }
+                    
             }
-            usleep(500);
-        }
-        
-        char external_url[50];
-        
-        strcpy(external_url, clocaltunnel_client_get_external_url(x->clocaltunnel));
-                
-        if (set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url) < 0) {
-            object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
+            critical_exit(0);
             return;
         }
+        usleep(500);
+    }
+    critical_exit(0);
+        
+    char external_url[50];
+    
+    strcpy(external_url, clocaltunnel_client_get_external_url(x->clocaltunnel));
+            
+    if (set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url) < 0) {
+        object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
+        return;
     }
 
     outlet_anything(x->m_outlet1, gensym("receiving"), 0, NULL);
