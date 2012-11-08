@@ -273,15 +273,14 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
         char external_url[50];
         
         strcpy(external_url, clocaltunnel_client_get_external_url(x->clocaltunnel));
-        
-        //Update twilio configuration with new SMS url
-        object_post((t_object *)x, external_url);
-        
+                
         if (set_sms_url(x->twilio_account_sid, x->curl, x->twilio_phone_number, external_url) < 0) {
             object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
+            return;
         }
     }
 
+    outlet_anything(x->m_outlet1, gensym("receiving"), 0, NULL);
 }
 
 void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {

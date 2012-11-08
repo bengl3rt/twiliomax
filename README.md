@@ -7,7 +7,7 @@ A work in progress. This is the source code for an external object that enables 
 
 The object takes two arguments for initialization, your Twilio Account SID and auth token. It requires at least one inbound number be active on your (paid) account.
 
-![Example patch](http://new.tinygrab.com/d791f091e4699a3c36112bfaa7bf8c7a5ae054a614.png)
+![Example patch](http://new.tinygrab.com/d791f091e4a970745e4b794b2067a7dfa6f063793c.png)
 
 **The object supports two messages into its inlet:**
 
@@ -25,8 +25,7 @@ The object takes two arguments for initialization, your Twilio Account SID and a
 
 3. Sets the SMS URL of the incoming number in your twilio account to the external URL of the localtunnel
 
-
-**The object currently only sends one message out of its only outlet:**
+**The object currently sends two messages out of its only outlet:**
 
 * sms
 
@@ -34,17 +33,16 @@ The object takes two arguments for initialization, your Twilio Account SID and a
 
 This indicates that an inbound SMS was received at your Twilio number. The first argument is the phone number the SMS originated from, and the second is its content.
 
-**As you can see, it does a lot of stuff, and there's a lot that can go wrong. It currently handles exactly none of it gracefully. Which leads us to...**
+* receiving
+		
+This indicates that the setup required to receive incoming SMS messages completed on the low-priority Max thread and you should now see incoming messges. If you send "receivesms" and do not get a "receiving" message within a few seconds, check your Max window for errors. It's a complicated process and there's a lot that can go wrong!
 
 [lt-website]: http://progrium.com/localtunnel/
 
 TODO
 ----
-* Error handling plumbed up through Max GUI
-* Figure out if I'm really using libcurl in a thread-safe way
-* Feedback/status out to Max patch - message indicating when receive connection is actually established etc
-* Plug into supposedly-forthcoming error handling in clocaltunnel ;-)
-
+* Figure out if I'm really using libcurl in a thread-safe way (enable multiple instances of receivesms in the same patch)
+* Error messages that tell you when your twilio credentials are wrong are not appearing. Figure out why.
 
 Dependencies
 -------------
