@@ -23,6 +23,8 @@ typedef struct _twiliomax
     
     struct mg_context *mongoose;
     struct clocaltunnel_client *clocaltunnel;
+    
+    void *m_receivesms_qelem;
 } t_twiliomax;
 
 ///////////////////////// function prototypes
@@ -33,6 +35,8 @@ void twiliomax_assist(t_twiliomax *x, void *b, long m, long a, char *s);
 
 void twiliomax_sendsms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv);
 void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv);
+
+void twiliomax_receivesms_qtask(t_twiliomax *x);
 
 //////////////////////// global class pointer variable
 void *twiliomax_class;
@@ -89,6 +93,8 @@ void twiliomax_free(t_twiliomax *x)
     if (x->twilio_phone_number) {
         free(x->twilio_phone_number);
     }
+    
+    qelem_free(x->m_receivesms_qelem);
 }
 
 
@@ -147,6 +153,8 @@ void *twiliomax_new(t_symbol *s, long argc, t_atom *argv)
             
             x->mongoose = NULL;
             x->clocaltunnel = NULL;
+            
+            x->m_receivesms_qelem = qelem_new((t_object *)x, (method)twiliomax_receivesms_qtask);
         }
 	}
 	return (x);
@@ -193,8 +201,7 @@ static void *twiliomax_mongoose_callback(enum mg_event event,
     }
 }
 
-void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
-    
+void twiliomax_receivesms_qtask(t_twiliomax *x) {
     if (!x->mongoose) {
         const char *options[] = {"listening_ports", "8080", NULL};
         
@@ -213,7 +220,7 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
         while (clocaltunnel_client_get_state(x->clocaltunnel) < CLOCALTUNNEL_CLIENT_TUNNEL_OPENED) {
             if (clocaltunnel_client_get_state(x->clocaltunnel) == CLOCALTUNNEL_CLIENT_ERROR)  {
                 clocaltunnel_error err = clocaltunnel_client_get_last_error(x->clocaltunnel);
-
+                
                 switch (err) {
                     case CLOCALTUNNEL_ERROR_MALLOC:
                     {
@@ -274,6 +281,11 @@ void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) 
             object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
         }
     }
+
+}
+
+void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
+    qelem_set(x->m_receivesms_qelem);
 }
 
 
