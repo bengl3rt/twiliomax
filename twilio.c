@@ -94,7 +94,9 @@ void twiliomax_free(t_twiliomax *x)
         free(x->twilio_phone_number);
     }
     
-    qelem_free(x->m_receivesms_qelem);
+    if (x->m_receivesms_qelem) {
+        qelem_free(x->m_receivesms_qelem);
+    }
 }
 
 
