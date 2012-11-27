@@ -7,7 +7,7 @@ A work in progress. This is the source code for an external object that enables 
 
 The object takes two arguments for initialization, your Twilio Account SID and auth token. It requires at least one inbound number be active on your (paid) account.
 
-![Example patch](http://new.tinygrab.com/d791f091e4a970745e4b794b2067a7dfa6f063793c.png)
+![Example patch](http://miazmatic.com/data/uploads/max-objects/twiliomax/twiliomax-screen.png)
 
 **The object supports two messages into its inlet:**
 
@@ -25,7 +25,7 @@ The object takes two arguments for initialization, your Twilio Account SID and a
 
 3. Sets the SMS URL of the incoming number in your twilio account to the external URL of the localtunnel
 
-**The object currently sends two messages out of its only outlet:**
+**The object currently sends three messages out of its only outlet:**
 
 * sms
 
@@ -36,6 +36,12 @@ This indicates that an inbound SMS was received at your Twilio number. The first
 * receiving
 		
 This indicates that the setup required to receive incoming SMS messages completed on the low-priority Max thread and you should now see incoming messges. If you send "receivesms" and do not get a "receiving" message within a few seconds, check your Max window for errors. It's a complicated process and there's a lot that can go wrong!
+
+* sent
+
+		sent "4089961010"
+
+This tells you that an SMS was sent, and tells you the number it was sent to. If you send "sendsms" and don't get a corresponding "sent" message, check your Max window for errors.
 
 [lt-website]: http://progrium.com/localtunnel/
 
