@@ -64,10 +64,10 @@ int main(void)
 void twiliomax_assist(t_twiliomax *x, void *b, long m, long a, char *s)
 {
 	if (m == ASSIST_INLET) { // inlet
-		sprintf(s, "I am inlet %ld", a);
+		sprintf(s, "General purpose inlet");
 	} 
 	else {	// outlet
-		sprintf(s, "I am outlet %ld", a); 			
+		sprintf(s, "General purpose outlet");
 	}
 }
 
@@ -312,5 +312,8 @@ void twiliomax_sendsms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
     
     if (send_outgoing_sms(x->twilio_account_sid, x->curl, x->twilio_phone_number, destination_number, message) < 0) {
         object_error((t_object *)x, "Unable to communicate with Twilio to send outgoing SMS");
+        return;
     }
+    
+    outlet_anything(x->m_outlet1, gensym("sent"), 1, &argv[0]);
 }
