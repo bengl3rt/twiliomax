@@ -265,6 +265,11 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
                     object_error((t_object *)x, "SSH agent could not authenticate. Try adding a key using ssh-add\n");
                     break;
                 }
+                case CLOCALTUNNEL_ERROR_SSH_KEY:
+                {
+                    object_error((t_object *)x, "No SSH key found on disk. Try creating one using ssh-keygen\n");
+                    break;
+                }
                 default:
                 {
                     object_error((t_object *)x, "Unknown clocaltunnel error");
