@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22CF11AE0EE9A8840054F513 /* twilio.c in Sources */ = {isa = PBXBuildFile; fileRef = 22CF11AD0EE9A8840054F513 /* twilio.c */; };
 		2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54266BCE05E6E9780000000C /* MaxAPI.framework */; };
+		B50ABAE1167D2F3C0043BCD0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5D411891607F26000F8003E /* libcurl.dylib */; };
 		B55BFE2316545F6600EE58C2 /* clocaltunnel.h in Headers */ = {isa = PBXBuildFile; fileRef = B55BFE2116545F6600EE58C2 /* clocaltunnel.h */; };
 		B55BFE2416545F6600EE58C2 /* libclocaltunnel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B55BFE2216545F6600EE58C2 /* libclocaltunnel.a */; };
 		B5645922163775B600DA695D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5645921163775B600DA695D /* libxml2.dylib */; };
@@ -16,7 +17,6 @@
 		B57DA5D01610D81D00673C0F /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = B57DA5CE1610D81D00673C0F /* mongoose.h */; };
 		B5AEBDDD162E7759001E951A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDC162E7759001E951A /* libz.dylib */; };
 		B5AEBDDF162E7761001E951A /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AEBDDE162E7761001E951A /* libcrypto.dylib */; };
-		B5D4118A1607F26000F8003E /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5D411891607F26000F8003E /* libcurl.dylib */; };
 		B5EAF44216377F7200E2FD0B /* jsmn.c in Sources */ = {isa = PBXBuildFile; fileRef = B5EAF43F16377F7200E2FD0B /* jsmn.c */; };
 		B5EAF44316377F7200E2FD0B /* jsmn.h in Headers */ = {isa = PBXBuildFile; fileRef = B5EAF44016377F7200E2FD0B /* jsmn.h */; };
 		B5EAF44416377F7200E2FD0B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B5EAF44116377F7200E2FD0B /* LICENSE */; };
@@ -48,10 +48,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B50ABAE1167D2F3C0043BCD0 /* libcurl.dylib in Frameworks */,
 				B5645922163775B600DA695D /* libxml2.dylib in Frameworks */,
 				B5AEBDDF162E7761001E951A /* libcrypto.dylib in Frameworks */,
 				B5AEBDDD162E7759001E951A /* libz.dylib in Frameworks */,
-				B5D4118A1607F26000F8003E /* libcurl.dylib in Frameworks */,
 				2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */,
 				B55BFE2416545F6600EE58C2 /* libclocaltunnel.a in Frameworks */,
 			);
@@ -232,7 +232,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx10.6;
 			};
 			name = Development;
 		};
@@ -241,7 +241,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx10.6;
 			};
 			name = Deployment;
 		};
