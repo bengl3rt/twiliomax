@@ -207,7 +207,7 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
     
     critical_enter(0);
     if (!x->mongoose) {
-        const char *options[] = {"listening_ports", "8080", NULL};
+        const char *options[] = {"listening_ports", "9999", NULL};
         
         x->mongoose = mg_start(&twiliomax_mongoose_callback, x, options);
     }
@@ -219,7 +219,7 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
         
         x->clocaltunnel = clocaltunnel_client_alloc(&err);
         
-        clocaltunnel_client_init(x->clocaltunnel, 8080);
+        clocaltunnel_client_init(x->clocaltunnel, 9999);
         
         clocaltunnel_client_start(x->clocaltunnel);
     }
@@ -270,6 +270,11 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
                     object_error((t_object *)x, "No SSH key found on disk. Try creating one using ssh-keygen\n");
                     break;
                 }
+                case CLOCALTUNNEL_ERROR_JSON:
+                {
+                    object_error((t_object *)x, "JSON parse error\n");
+                    break;
+                }
                 default:
                 {
                     object_error((t_object *)x, "Unknown clocaltunnel error");
@@ -292,8 +297,12 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
         object_error((t_object *)x, "Unable to communicate with Twilio to update inbound SMS URL");
         return;
     }
-
-    outlet_anything(x->m_outlet1, gensym("receiving"), 0, NULL);
+    
+    t_atom receiving_atom[1];
+    
+    atom_setsym(&receiving_atom[0], gensym(x->twilio_phone_number->phone_number));
+    
+    outlet_anything(x->m_outlet1, gensym("receiving"), 1, receiving_atom);
 }
 
 void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
