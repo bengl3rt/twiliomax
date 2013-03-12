@@ -75,13 +75,13 @@ int get_incoming_phone_number(char *account_sid, CURL *the_curl, struct incoming
     }
     
     jsmn_parser p;
-	jsmntok_t tok[100];
+	jsmntok_t tok[10000];
 	
-    memset(tok, -1, 100);
+    memset(tok, -1, 10000);
     
 	jsmn_init(&p);
     
-	if (jsmn_parse(&p, chunk.memory, tok, 100)) {
+	if (jsmn_parse(&p, chunk.memory, tok, 10000)) {
         free(chunk.memory);
         return -2;
     }
