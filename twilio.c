@@ -302,7 +302,8 @@ void twiliomax_receivesms_qtask(t_twiliomax *x) {
     
     atom_setsym(&receiving_atom[0], gensym(x->twilio_phone_number->phone_number));
     
-    outlet_anything(x->m_outlet1, gensym("receiving"), 1, receiving_atom);
+    outlet_anything(x->m_outlet1, gensym("receiving"), 0, NULL);
+    outlet_anything(x->m_outlet1, gensym("incoming-number"), 1, receiving_atom);
 }
 
 void twiliomax_receivesms(t_twiliomax *x, t_symbol *s, long argc, t_atom *argv) {
